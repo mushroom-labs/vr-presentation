@@ -1,22 +1,44 @@
-<!DOCTYPE html>
-<html>
-  <head>
+<!doctype html>
+<html class="no-js" lang="">
+<head>
     <meta charset="utf-8">
-    <title>Master Client</title><script src="/socket.io/socket.io.js"></script>
-    <script src="./client_app.js"></script>
-  </head>
-  <body>
-  </body>
-  <script>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+<h1 class="title backgrounded-text" id="title">...</h1>
+<div class="slides-container" id="slidesContainer"></div>
+<div class="slides-counter backgrounded-text radiused-border" id="slidesCounter">0</div>
+<div class="controls" id="controls">
+    <button class="controls__button controls__prev radiused-border" id="prevControl"></button>
+    <button class="controls__button controls__next radiused-border" id="nextControl"></button>
+</div>
+<p class="note backgrounded-text radiused-border">You are active client. <br/>When you are switch slides every client
+    see this too.</p>
+
+<script src="js/client_app.js"></script>
+<script src="../socket.io/socket.io.js"></script>
+<script>
     const ioClient = io();
-    ioClient.on("init_data", (items) => {
-        if (items.length == 0) {
+    ioClient.on("init_data", (presentation) => {
+        if (!presentation) {
             throw new Error("Empty data");
         }
-        const app = new MasterClientApp(ioClient, items);
+        const appConfig = {
+            client: ioClient,
+            presentation: presentation,
+            titleView: document.getElementById("title"),
+            slidesCounterView: document.getElementById("slidesCounter"),
+            nextButtonView: document.getElementById("nextControl"),
+            prevButtonView: document.getElementById("prevControl"),
+            slidesContainerView: document.getElementById("slidesContainer"),
+        };
+        const app = new MasterClientApp(appConfig);
         window["app"] = app;
         //TODO: add calls of app.next() and app.prev()
     });
     ioClient.emit("connect_master");
-  </script>
+</script>
+</body>
 </html>

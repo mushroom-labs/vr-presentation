@@ -2,7 +2,7 @@ const http = require("http");
 const express = require("express");
 const path = require("path");
 const socketio = require("socket.io");
-const items = require("./data.json");
+const presentation = require("./data.json");
 
 const PORT = 3000;
 
@@ -43,12 +43,12 @@ ioServer.on("connection", (socket) => {
             console.log(`show item: ${itemIndex}`);
             socket.broadcast.emit('show_item', itemIndex);
         })
-        socket.emit("init_data", items, currentIndex);
+        socket.emit("init_data", presentation, currentIndex);
         socket.broadcast.emit("show_item", currentIndex);
     });
 
     socket.on("connect_slave", () => {
-        socket.emit("init_data", items, currentIndex);
+        socket.emit("init_data", presentation, currentIndex);
     });
 });
 

@@ -7,7 +7,6 @@ class ClientApp {
         this._slidesContainerView = appConfig.slidesContainerView;
 
         this._currentItemIndex = NaN;
-        this._titleView.innerText = this._presentation.title;
     }
 
     setCurrentItem(index) {
@@ -41,6 +40,7 @@ class MasterClientApp extends ClientApp {
         this._prevButtonView = appConfig.prevButtonView;
         this._nextButtonView.addEventListener("click", () => this.next());
         this._prevButtonView.addEventListener("click", () => this.prev());
+        this._titleView.innerText = this._presentation.title;
         this.setCurrentItem(0);
     }
 
@@ -69,15 +69,12 @@ class SlaveClientApp extends ClientApp {
         ioClient.on("show_item", (itemIndex => {
             this.setCurrentItem(itemIndex);
         }));
-        //TODO
     }
 
     _onCurrentItemChanged(itemIndex) {
-        //DO NOTHING
     }
 
     _invalidateItemView(itemIndex) {
-        //TODO
-        console.log(this._items[itemIndex]);
+        this._slidesContainerView.setAttribute("src", this._presentation.slides[itemIndex].data);
     }
 }

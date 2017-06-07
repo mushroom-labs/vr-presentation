@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Slave Client</title><script src="/socket.io/socket.io.js"></script>
+    <script src="./client_app.js"></script>
+  </head>
+  <body>
+  </body>
+  <script>
+    const ioClient = io();
+    ioClient.on("init_data", (items, currentItemIndex) => {
+        if (items.length == 0) {
+            throw new Error("Empty data");
+        }
+        const app = new SlaveClientApp(ioClient, items);
+        app.setCurrentItem(currentItemIndex);
+        window["app"] = app;
+    });
+    ioClient.emit("connect_slave");
+  </script>
+</html>

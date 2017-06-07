@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Master Client</title><script src="/socket.io/socket.io.js"></script>
+    <script src="./client_app.js"></script>
+  </head>
+  <body>
+  </body>
+  <script>
+    const ioClient = io();
+    ioClient.on("init_data", (items) => {
+        if (items.length == 0) {
+            throw new Error("Empty data");
+        }
+        const app = new MasterClientApp(ioClient, items);
+        window["app"] = app;
+        //TODO: add calls of app.next() and app.prev()
+    });
+    ioClient.emit("connect_master");
+  </script>
+</html>

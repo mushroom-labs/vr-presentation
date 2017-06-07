@@ -1,0 +1,13 @@
+{
+  "name": "vr-presentation",
+  "version": "1.0.0",
+  "author": "mushroom-labs",
+  "license": "MIT",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "socket.io": "^2.0.2"
+  }
+}

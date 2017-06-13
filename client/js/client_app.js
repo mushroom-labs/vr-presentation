@@ -50,7 +50,7 @@ class MasterClientApp extends ClientApp {
 
     _invalidateItemView(itemIndex) {
         const item = this._presentation.slides[itemIndex];
-        this._slidesContainerView.style = `background-image: url("${item.data}");`;
+        this._slidesContainerView.style = `background-image: url("${item.data.blob}");`;
         this._slidesCounterView.innerText = itemIndex;
     }
 
@@ -66,6 +66,8 @@ class MasterClientApp extends ClientApp {
 class SlaveClientApp extends ClientApp {
     constructor(appConfig) {
         super(appConfig);
+        this._maxWidth = this._slidesContainerView.getAttribute("width");
+        this._maxHeight = this._slidesContainerView.getAttribute("height");
         ioClient.on("show_item", (itemIndex => {
             this.setCurrentItem(itemIndex);
         }));
@@ -75,6 +77,10 @@ class SlaveClientApp extends ClientApp {
     }
 
     _invalidateItemView(itemIndex) {
-        this._slidesContainerView.setAttribute("src", this._presentation.slides[itemIndex].data);
+        const slideData = this._presentation.slides[itemIndex].data;
+        const scale = Math.min(this._maxWidth / slideData.width, this._maxHeight / slideData.height);
+        this._slidesContainerView.setAttribute("src", slideData.blob);
+        this._slidesContainerView.setAttribute("width", slideData.width * scale);
+        this._slidesContainerView.setAttribute("height", slideData.height * scale);
     }
 }

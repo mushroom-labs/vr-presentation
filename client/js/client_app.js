@@ -50,7 +50,7 @@ class MasterClientApp extends ClientApp {
 
     _invalidateItemView(itemIndex) {
         const item = this._presentation.slides[itemIndex];
-        this._slidesContainerView.style = `background-image: url("${item.data.blob}");`;
+        this._slidesContainerView.style = `background-image: url("${item.srcPath}");`;
         this._slidesCounterView.innerText = itemIndex;
     }
 
@@ -77,10 +77,26 @@ class SlaveClientApp extends ClientApp {
     }
 
     _invalidateItemView(itemIndex) {
-        const slideData = this._presentation.slides[itemIndex].data;
+        const slideData = this._presentation.slides[itemIndex];
         const scale = Math.min(this._maxWidth / slideData.width, this._maxHeight / slideData.height);
-        this._slidesContainerView.setAttribute("src", slideData.blob);
+        this._slidesContainerView.setAttribute("src", slideData.srcPath);
         this._slidesContainerView.setAttribute("width", slideData.width * scale);
         this._slidesContainerView.setAttribute("height", slideData.height * scale);
     }
+}
+
+function preloadSlides(slidesData) {
+    const loadPromises = [];
+    for (const slideData of slidesData) {
+        loadPromises.push(new Promise((resolve) => {
+            const image = new Image();
+            image.onload = () => {
+                slideData["width"] = image.naturalWidth;
+                slideData["height"] = image.naturalHeight;
+                resolve();
+            };
+            image.src = slideData.srcPath;
+        }));
+    }
+    return Promise.all(loadPromises);
 }

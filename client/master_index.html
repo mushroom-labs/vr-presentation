@@ -25,18 +25,18 @@
         if (!presentation) {
             throw new Error("Empty data");
         }
-        const appConfig = {
-            client: ioClient,
-            presentation: presentation,
-            titleView: document.getElementById("title"),
-            slidesCounterView: document.getElementById("slidesCounter"),
-            nextButtonView: document.getElementById("nextControl"),
-            prevButtonView: document.getElementById("prevControl"),
-            slidesContainerView: document.getElementById("slidesContainer"),
-        };
-        const app = new MasterClientApp(appConfig);
-        window["app"] = app;
-        //TODO: add calls of app.next() and app.prev()
+        preloadSlides(presentation.slides).then(() => {
+            const appConfig = {
+                client: ioClient,
+                presentation: presentation,
+                titleView: document.getElementById("title"),
+                slidesCounterView: document.getElementById("slidesCounter"),
+                nextButtonView: document.getElementById("nextControl"),
+                prevButtonView: document.getElementById("prevControl"),
+                slidesContainerView: document.getElementById("slidesContainer"),
+            };
+            window["app"] = new MasterClientApp(appConfig);
+        });
     });
     ioClient.emit("connect_master");
 </script>

@@ -18,12 +18,14 @@
         if (!presentation) {
             throw new Error("Empty data");
         }
-        const appConfig = {
-            client: ioClient,
-            presentation: presentation,
-            slidesContainerView: document.getElementById("slidesContainer"),
-        };
-        new SlaveClientApp(appConfig).setCurrentItem(currentItemIndex);
+        preloadSlides(presentation.slides).then(() => {
+            const appConfig = {
+                client: ioClient,
+                presentation: presentation,
+                slidesContainerView: document.getElementById("slidesContainer"),
+            };
+            window["app"] = new SlaveClientApp(appConfig).setCurrentItem(currentItemIndex);
+        });
     });
     ioClient.emit("connect_slave");
 </script>

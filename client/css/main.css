@@ -1,6 +1,7 @@
 html, body, .slides-container {
     width: 100%;
     height: 100%;
+    background: black;
 }
 
 .radiused-border {
@@ -16,7 +17,8 @@ html, body, .slides-container {
 
 .slides-container {
     background: url("../img/slide.png") no-repeat;
-    background-size: cover;
+    background-size: contain;
+    background-position: center;
 }
 
 .slides-counter {
